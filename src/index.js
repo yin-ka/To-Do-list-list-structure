@@ -1,20 +1,53 @@
 import './style.css';
+import { Operations } from './modules/operations.js';
 
-const todos = [
-  { index: 1, description: 'Learn software development skill', completed: true },
-  { index: 2, description: 'Get a job', completed: false },
-  { index: 3, description: 'Upgrade my system', completed: false },
-];
+const taskContainer = document.getElementById('task_container');
+const submitButton = document.getElementById('addButton');
+// const clearAllDone = document.getElementById('clear_complete');
+let editButtonStats = false;
+window.onload = function windowReady() {
+  Operations.showTask();
+  submitButton.onclick = function () {
+    Operations.createTask();
+  };
 
-const taskContainer = document.querySelector('.body_cont');
+  // EDTING
+  taskContainer.addEventListener('click', (e) => {
+    if (e.target !== null && e.target !== 'NaN' && e.target !== '') {
+      if (e.target.className === 'editButton') {
+        const ids = e.target.id.replace('editBttn-', '');
+        const description = document.getElementById(`d${ids}`);
+        const data = Operations.getAllTasks();
+        const index = parseInt(ids, 10);
+        const editInput = document.getElementById(`edit-${ids}`);
+        description.style.display = 'none';
+        editInput.style.display = 'block';
+        if (editButtonStats !== false) {
+          data[index - 1].description = editInput.value;
+          description.style.display = 'block';
+          editInput.style.display = 'none';
+          Operations.updateTask(data);
+          Operations.showTask();
+          editButtonStats = false;
+        } else {
+          editButtonStats = true;
+        }
+      }
+    }
+  });
 
-const tasks = todos.map((todo) => `
-      <div class="todos">
-        <div class="task"><input type="checkbox" id="demoCheckbox" name="checkbox" value="1">
-            <label for="demoCheckbox">${todo.description}</label>
-        </div>
-        <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-      </div>
-      `).join('');
-
-taskContainer.innerHTML = tasks;
+  // REMOVING
+  Operations.showTask();
+  taskContainer.addEventListener('click', (e) => {
+    if (e.target !== null && e.target !== 'NaN' && e.target !== '') {
+      if (e.target.className === 'deleteButton') {
+        const ids = e.target.id.replace('delete-', '');
+        const data = Operations.getAllTasks();
+        const index = parseInt(ids, 10);
+        if (data !== []) {
+          Operations.removeTask(index - 1);
+        }
+      }
+    }
+  });
+};
