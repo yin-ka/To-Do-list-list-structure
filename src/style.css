@@ -1,0 +1,50 @@
+.main_sec {
+  margin: 15%;
+  box-shadow: 3px 5px 10px 10px rgb(87, 84, 84);
+}
+
+.head_cont,
+.neck_cont,
+.todos {
+  display: flex;
+  padding-top: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  justify-content: space-between;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border: 1px solid rgb(76, 75, 75);
+}
+
+.title {
+  font-weight: 600;
+  font-size: large;
+}
+
+.foot_cont {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 10px;
+  border: 1px solid rgb(76, 75, 75);
+  background-color: rgb(219, 219, 219);
+}
+
+#text_field {
+  border: 0 solid white;
+  font-size: large;
+  font-style: italic;
+  width: 90%;
+}
+
+#text_field:focus {
+  outline: none;
+}
+
+.task {
+  font-size: large;
+}
+
+.todos > i {
+  cursor: move;
+}
