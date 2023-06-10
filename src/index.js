@@ -3,15 +3,36 @@ import { Operations } from './modules/operations.js';
 
 const taskContainer = document.getElementById('task_container');
 const submitButton = document.getElementById('addButton');
-// const clearAllDone = document.getElementById('clear_complete');
+const clearAllDone = document.getElementById('clear_complete');
 let editButtonStats = false;
 window.onload = function windowReady() {
   Operations.showTask();
-  submitButton.onclick = function () {
+  submitButton.onclick = () => {
     Operations.createTask();
   };
 
-  // EDTING
+  taskContainer.addEventListener('click', (e) => {
+    if (e.target !== null && e.target !== 'NaN' && e.target !== '') {
+      if (e.target.className === 'checkbox-class') {
+        const ids = e.target.id.replace('checkbox-', '');
+        const description = document.getElementById(`d${ids}`);
+        const data = Operations.getAllTasks();
+        const index = parseInt(ids - 1, 10);
+        if (data !== []) {
+          if (data[index].completed) {
+            data[index].completed = false;
+            description.style.textDecoration = 'none';
+          } else {
+            data[index].completed = true;
+            description.style.textDecoration = 'line-through';
+          }
+          Operations.updateTask(data);
+        }
+      }
+    }
+  });
+
+  // ! EDTING
   taskContainer.addEventListener('click', (e) => {
     if (e.target !== null && e.target !== 'NaN' && e.target !== '') {
       if (e.target.className === 'editButton') {
@@ -36,7 +57,7 @@ window.onload = function windowReady() {
     }
   });
 
-  // REMOVING
+  //! REMOVING
   Operations.showTask();
   taskContainer.addEventListener('click', (e) => {
     if (e.target !== null && e.target !== 'NaN' && e.target !== '') {
@@ -49,5 +70,16 @@ window.onload = function windowReady() {
         }
       }
     }
+  });
+
+  clearAllDone.addEventListener('click', () => {
+    const data = Operations.getAllTasks();
+    const storage = data.filter((todo) => todo.completed === false);
+    // eslint-disable-next-line no-plusplus
+    for (let i = 0; i < storage.length; i++) {
+      storage[i].index = i + 1;
+    }
+    Operations.updateTask(storage);
+    Operations.showTask();
   });
 };
